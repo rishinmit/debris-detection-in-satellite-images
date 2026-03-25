@@ -1,0 +1,21 @@
+# Node
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+
+# ML models
+*.pth
+backend/models/
+
+# Environment variables
+.env
+.env.*
+
+# Build files
+dist/
+build/
+
+# OS
+.DS_Store
