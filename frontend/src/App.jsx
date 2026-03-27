@@ -19,6 +19,8 @@ import {
   mockModelWiseData 
 } from './utils/analysis';
 
+
+
 function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -75,6 +77,12 @@ function App() {
 
   return (
     <div className="app">
+       {/* {isLoading && (
+    <div className="global-loading">
+      <div className="loading-spinner"></div>
+      <span>Analyzing image...</span>
+    </div>
+  )} */}
       <header className="app-header">
         <div className="header-content">
           <div className="logo">
@@ -96,7 +104,11 @@ function App() {
           <div className="left-panel">
             <ImageUpload onUpload={handleImageUpload} isLoading={isLoading} />
             
-            {isLoading && <PipelineFlow isProcessing={true} currentStep={pipelineStep} />}
+            {/* {isLoading && <PipelineFlow isProcessing={true} currentStep={pipelineStep} />} */}
+            <PipelineFlow 
+  isProcessing={isLoading} 
+  currentStep={pipelineStep} 
+/>
             
             {error && (
               <div className="error-message">

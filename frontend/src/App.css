@@ -4,6 +4,40 @@
   box-sizing: border-box;
 }
 
+/* =========================
+   Floating Loading Bar
+========================= */
+
+.global-loading {
+  position: fixed;
+  top: 90px;   /* below navbar */
+  left: 50%;
+  transform: translateX(-50%);
+
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid #38bdf8;
+  border-radius: 10px;
+
+  padding: 10px 20px;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  color: #38bdf8;
+  font-size: 14px;
+
+  z-index: 999;
+  backdrop-filter: blur(6px);
+
+    animation: fadeIn 0.3s ease;
+
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translate(-50%, -10px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
 body {
   font-family: 'JetBrains Mono', monospace;
   background: linear-gradient(135deg, #0a0e1a 0%, #141c34 50%, #1e2a47 100%);
