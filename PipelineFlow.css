@@ -113,10 +113,12 @@
 
 .pipeline-steps {
   display: flex;
-  flex-direction: column;   /* 🔥 THIS is the key */
   align-items: center;
-  gap: 1.5rem;
-  overflow: visible;        /* remove horizontal scroll */
+  gap: 0;
+  overflow-x: auto;
+  padding: 1rem 0;
+  position: relative;
+  z-index: 1;
 }
 
 /* Hide scrollbar but keep functionality */
@@ -264,26 +266,13 @@
 
 /* COMPLETE STATE */
 .pipeline-step.step-complete {
-  border-color: rgba(80, 250, 123, 0.8);
-  background: linear-gradient(135deg, rgba(80, 250, 123, 0.18) 0%, rgba(139, 233, 253, 0.18) 100%);
+  border-color: rgba(80, 250, 123, 0.6);
+  background: linear-gradient(135deg, rgba(80, 250, 123, 0.12) 0%, rgba(139, 233, 253, 0.12) 100%);
   box-shadow: 
-    0 0 25px rgba(80, 250, 123, 0.6),
-    0 0 50px rgba(80, 250, 123, 0.3),
-    inset 0 0 15px rgba(80, 250, 123, 0.2);
-  animation: completed-glow 2s ease-in-out infinite;  /* 🔥 NEW */
+    0 0 20px rgba(80, 250, 123, 0.3),
+    inset 0 0 10px rgba(80, 250, 123, 0.1);
 }
-@keyframes completed-glow {
-  0%, 100% {
-    box-shadow: 
-      0 0 20px rgba(80, 250, 123, 0.5),
-      0 0 40px rgba(80, 250, 123, 0.3);
-  }
-  50% {
-    box-shadow: 
-      0 0 35px rgba(80, 250, 123, 0.9),
-      0 0 70px rgba(80, 250, 123, 0.5);
-  }
-}
+
 .pipeline-step.step-complete .step-glow {
   opacity: 0.6;
   background: radial-gradient(
@@ -309,15 +298,24 @@
 
 /* CONNECTOR */
 .pipeline-connector {
-  width: 4px;
-  height: 60px;
-  min-width: unset;
-  max-width: unset;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 60px;
+  max-width: 100px;
+  position: relative;
+  height: 4px;
 }
 
 .connector-line {
-  width: 4px;
-  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: rgba(139, 233, 253, 0.2);
+  transition: all 0.5s ease;
+  border-radius: 2px;
 }
 
 .connector-glow {
@@ -333,10 +331,14 @@
 }
 
 .connector-arrow {
-  bottom: -12px;
-  right: auto;
-  left: 50%;
-  transform: translateX(-50%) rotate(90deg); /* ↓ instead of → */
+  position: absolute;
+  right: -8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.5rem;
+  color: rgba(139, 233, 253, 0.3);
+  transition: all 0.5s ease;
+  z-index: 1;
+  text-shadow: 0 0 10px rgba(139, 233, 253, 0.3);
 }
 
 /* CONNECTOR ACTIVE */
@@ -384,8 +386,10 @@
 
 /* CONNECTOR COMPLETE */
 .pipeline-connector.connector-complete .connector-line {
-  background: linear-gradient(180deg, #50fa7b, #8be9fd);
-  animation: flow 2s ease-in-out infinite;  /* 🔥 KEEP ALIVE */
+  background: linear-gradient(90deg, #50fa7b, #8be9fd);
+  box-shadow: 
+    0 0 12px rgba(80, 250, 123, 0.5),
+    0 0 24px rgba(80, 250, 123, 0.3);
 }
 
 .pipeline-connector.connector-complete .connector-glow {
