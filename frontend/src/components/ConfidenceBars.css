@@ -1,0 +1,77 @@
+.confidence-bars {
+  width: 100%;
+}
+
+.confidence-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #f8f8f2;
+  margin: 0 0 1.25rem 0;
+}
+
+.bars-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.confidence-bar-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.bar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bar-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.bar-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.bar-name {
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #f8f8f2;
+}
+
+.bar-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #8be9fd;
+}
+
+.bar-track {
+  width: 100%;
+  height: 10px;
+  background: rgba(139, 233, 253, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 10px currentColor;
+}
+
+.bar-description {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: rgba(248, 248, 242, 0.5);
+  margin: 0;
+  line-height: 1.4;
+}
