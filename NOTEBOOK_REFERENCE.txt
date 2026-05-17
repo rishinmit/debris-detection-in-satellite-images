@@ -1,0 +1,243 @@
+================================================================================
+                    MARIDA FYP — NOTEBOOK REFERENCE
+================================================================================
+
+YOUR NOTEBOOKS (LOCAL)
+================================================================================
+
+📁 /Users/rishiraj/Downloads/FYP React/
+
+  ⭐ Retrain_Improved_Models.ipynb
+     → PURPOSE: Train 3 models with improvements (Dice + Focal Loss + augmentation)
+     → RUN: In Google Colab, cells 0-14 (top to bottom)
+     → TIME: ~1.5 hours on T4 GPU
+     → OUTPUT: Models saved to Google Drive (FYP_models_improved/)
+     → STATUS: Ready to use ✅
+
+  ⭐ Model_Copy_of_Working_FYP_1.ipynb
+     → PURPOSE: Evaluate trained models with TTA + weighted ensemble
+     → RUN: In Google Colab, cells 0-17 (top to bottom)
+     → TIME: ~15 minutes
+     → INPUT: Models from Google Drive
+     → OUTPUT: Accuracy, F1, AUC, confusion matrices, PR curves, comparison charts
+     → STATUS: Ready to use ✅
+     → NOTE: Update Cell 2 MODEL_DIR to point to FYP_models_improved
+
+  📖 Copy_of_Working_FYP_1.ipynb
+     → PURPOSE: Original notebook (do NOT use for training/evaluation)
+     → KEEP: For reference only
+     → STATUS: Archived ⚠️
+
+SUPPORTING DOCUMENTS
+================================================================================
+
+  📋 RETRAINING_GUIDE.md
+     → Quick start guide (step-by-step instructions)
+     → Expected results and troubleshooting
+     → Checklist for verification
+
+  📋 WORKFLOW_SUMMARY.md
+     → Complete overview of improvements
+     → What changed in retraining
+     → Expected accuracy improvements
+     → Timeline and resource requirements
+
+  📄 This file: NOTEBOOK_REFERENCE.txt
+     → You are reading this
+
+
+QUICK START (3 STEPS)
+================================================================================
+
+STEP 1: OPEN COLAB
+  → Go to https://colab.research.google.com
+  → Click "Upload notebook" or "GitHub"
+  → Upload: Retrain_Improved_Models.ipynb
+
+STEP 2: RUN RETRAINING (1.5 HOURS)
+  → Mount Drive when prompted
+  → Check Cell 2: MARIDA_PATH and paths exist
+  → Run all cells (0 → 14)
+  → Watch console: loss should decrease, F1 should increase
+  → Models auto-save to Drive every epoch
+
+STEP 3: RUN EVALUATION (15 MINUTES)
+  → Upload: Model_Copy_of_Working_FYP_1.ipynb
+  → Edit Cell 2: MODEL_DIR = "/content/drive/MyDrive/FYP_models_improved"
+  → Run all cells (0 → 17)
+  → Read output in Cell 13-16 for results
+
+
+IMPROVEMENTS IN RETRAINING NOTEBOOK
+================================================================================
+
+✅ LOSS FUNCTIONS
+   - Dice Loss: Optimizes F1 directly
+   - Focal Loss: Focuses on hard examples
+   - BCE: Class-weighted binary cross-entropy
+   - Combined: All three weighted (BCE + 0.5*Dice + 0.3*Focal)
+
+✅ CLASS WEIGHTING
+   - marine_debris:   3.71× weight (rare class)
+   - sargassum:       19.45× weight (rarest)
+   - turbid_water:    1.45× weight
+   - organic:         13.03× weight
+   - cloud:           21.56× weight (rarest)
+
+✅ AUGMENTATION
+   - HorizontalFlip (50%), VerticalFlip (50%), Rotate ±45° (50%)
+   - GaussianNoise (30%), RandomBrightnessContrast (30%)
+   - Applied during training only (not validation/test)
+
+✅ LEARNING STRATEGY
+   - Learning rate: 1e-4 (lower = more stable)
+   - Optimizer: AdamW with weight decay (1e-5)
+   - Scheduler: ReduceLROnPlateau (halve LR if no improvement)
+   - Early stopping: 15 epochs without F1 gain
+   - Gradient clipping: max norm 1.0
+
+✅ AUTOMATIC SAVING
+   - Best checkpoint: Saved every epoch to Drive
+   - Final weights: Saved after training completes
+   - Never lose progress if Colab disconnects
+
+
+EXPECTED RESULTS
+================================================================================
+
+Metric: Macro-Averaged F1 (better than accuracy for imbalanced data)
+
+MODEL            OLD RESULTS    EXPECTED AFTER RETRAINING    WITH TTA+ENSEMBLE
+─────────────────────────────────────────────────────────────────────────────
+DeepLabV3        0.328 (33%)    0.48 - 0.55 (48-55%)         ↑
+ResNet50         0.326 (33%)    0.43 - 0.50 (43-50%)         ↑
+EfficientNet     0.129 (13%)    0.40 - 0.48 (40-48%)         ↑
+Ensemble         0.401 (40%)    ─────────────────            0.55 - 0.65 ✨
+
+*Actual results vary based on GPU, convergence, and random seed*
+
+
+GOOGLE DRIVE STRUCTURE
+================================================================================
+
+BEFORE RETRAINING:
+  MyDrive/
+  └── MARIDA/                 (your dataset)
+  └── FYP_models/             (old models - optional, keep for backup)
+
+AFTER RETRAINING:
+  MyDrive/
+  └── MARIDA/                 (unchanged)
+  └── FYP_models/             (old models - backup)
+  └── FYP_models_improved/    ← Use this in evaluation notebook
+      ├── model1_deeplabv3_best_f1_0.XXX.pth
+      ├── model1_deeplabv3_final.pth
+      ├── model2_resnet50_best_f1_0.XXX.pth
+      ├── model2_resnet50_final.pth
+      ├── model3_efficientnet_best_f1_0.XXX.pth
+      └── model3_efficientnet_final.pth
+
+
+TIMING BREAKDOWN
+================================================================================
+
+RETRAINING (Retrain_Improved_Models.ipynb):
+  Cell 1 (Mount + Install)       :  2 min
+  Cell 2-5 (Setup)               :  5 min
+  Cell 6-8 (Load & prepare)      :  3 min
+  Cell 10 (DeepLabV3 train)      :  20-30 min   ← longest
+  Cell 11 (ResNet50 train)       :  10-15 min
+  Cell 12 (EfficientNet train)   :  8-12 min
+  Cell 13-14 (Evaluate + verify) :  5 min
+  ──────────────────────────────────────
+  TOTAL                          : ~1.5 hours
+
+EVALUATION (Model_Copy_of_Working_FYP_1.ipynb):
+  Cell 0-9 (Setup + load)        :  3 min
+  Cell 11 (TTA inference)        :  8-10 min     ← longest
+  Cell 12-17 (Metrics + charts)  :  2-3 min
+  ──────────────────────────────────────
+  TOTAL                          : ~15 minutes
+
+
+TROUBLESHOOTING
+================================================================================
+
+PROBLEM: "ModuleNotFoundError: albumentations"
+FIX: Cell 1 installs it. Make sure you run that cell first.
+
+PROBLEM: "CUDA out of memory"
+FIX: Cell 2 of retrain notebook:
+  - Change BATCH_SIZE = 16 to BATCH_SIZE = 8
+  - Or reduce image size (if possible)
+
+PROBLEM: "Session timeout / disconnected"
+FIX:
+  - Free Colab: Normal, happens after ~12 hours
+  - Use Colab Pro ($10/mo) for longer sessions
+  - Or retrain in multiple sessions (checkpoints save to Drive)
+
+PROBLEM: "Models training very slowly"
+FIX:
+  - Check GPU is in use: run !nvidia-smi in a cell
+  - If CPU, try Restart Runtime and allow GPU reset
+  - Check for data loading bottleneck (workers=2, pin_memory=True)
+
+PROBLEM: "F1 score not increasing"
+FIX:
+  - Check loss is decreasing (console output)
+  - If loss flat: learning rate might be too low/high
+  - Wait more epochs (models take 5-10 epochs to warm up)
+
+PROBLEM: "Can't find models after retraining"
+FIX:
+  - Check Google Drive: MyDrive/FYP_models_improved/ should exist
+  - Verify notebook cell 13 output (lists all saved files)
+  - Update evaluation notebook Cell 2 path
+
+
+CONTACT / ISSUES
+================================================================================
+
+If retraining isn't working:
+  1. Check internet (Colab needs good connection)
+  2. Verify paths in Cell 2 (use full /content/drive/MyDrive/... paths)
+  3. Run !ls /content/drive/MyDrive/MARIDA/ to verify dataset mounted
+  4. Check GPU: !nvidia-smi (should show T4, P100, V100, or A100)
+
+If evaluation results are poor:
+  1. Verify retraining completed (check Cell 13 output)
+  2. Verify Cell 2 MODEL_DIR points to FYP_models_improved
+  3. Check F1 was increasing during training (console logs)
+
+For best results:
+  - Use Colab Pro for stable long training sessions
+  - Don't interrupt cells mid-training
+  - Close other Colab tabs (to avoid rate limiting)
+
+
+FINAL CHECKLIST BEFORE SUBMITTING
+================================================================================
+
+□ Retrain_Improved_Models.ipynb completed (all models trained)
+□ Models saved to Google Drive (FYP_models_improved/ folder exists)
+□ Model_Copy_of_Working_FYP_1.ipynb evaluation completed
+□ Metrics tables generated (Cell 13-14 output)
+□ Confusion matrices saved (confusion_matrices.png)
+□ PR curves saved (pr_curves.png)
+□ Model comparison chart saved (model_comparison.png)
+□ F1 heatmap saved (f1_heatmap.png)
+□ Accuracy numbers match your expected range
+□ Narrative section written (Cell 17 markdown)
+
+READY TO SUBMIT! 🎓
+
+
+================================================================================
+Created for: MARIDA FYP Project
+Models: DeepLabV3, ResNet50, EfficientNet-B0
+Dataset: MARIDA (Multi-class seA Rubbish Image Database)
+Task: Multi-label marine debris detection in Sentinel-2 patches
+
+Good luck with your final year project! 🚀
+================================================================================

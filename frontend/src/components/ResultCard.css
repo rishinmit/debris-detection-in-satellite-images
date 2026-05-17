@@ -1,0 +1,32 @@
+.result-card {
+  background: linear-gradient(135deg, rgba(20, 28, 52, 0.8) 0%, rgba(30, 42, 71, 0.8) 100%);
+  border: 1px solid rgba(139, 233, 253, 0.2);
+  border-radius: 16px;
+  padding: 1.5rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.result-card:hover {
+  border-color: rgba(139, 233, 253, 0.4);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(139, 233, 253, 0.15);
+}
+
+.result-card-header {
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(139, 233, 253, 0.1);
+}
+
+.result-card-header h3 {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #f8f8f2;
+  margin: 0;
+}
+
+.result-card-body {
+  font-family: 'JetBrains Mono', monospace;
+}

@@ -1,0 +1,96 @@
+# =========================
+# DATASETS
+# =========================
+MARIDA/
+*.tif
+*.tiff
+*.h5
+*.hdf5
+*.npy
+*.npz
+*.pkl
+*.pickle
+*.pt
+*.pth
+*.ckpt
+*.onnx
+
+# =========================
+# TRAINING OUTPUTS
+# =========================
+runs/
+logs/
+checkpoints/
+models/
+weights/
+outputs/
+predictions/
+results/
+wandb/
+lightning_logs/
+tensorboard_logs/
+
+# =========================
+# JUPYTER
+# =========================
+.ipynb_checkpoints/
+
+# Optional:
+# Ignore large experimental notebooks
+# Keep only cleaned final notebooks
+Copy_of_Working_FYP_1.ipynb
+
+# =========================
+# PYTHON
+# =========================
+__pycache__/
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# =========================
+# VIRTUAL ENVIRONMENTS
+# =========================
+venv/
+.env/
+.envrc
+.venv/
+
+# =========================
+# IDE / OS FILES
+# =========================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# =========================
+# CACHE FILES
+# =========================
+.cache/
+.pytest_cache/
+.mypy_cache/
+
+# =========================
+# GOOGLE COLAB
+# =========================
+/content/
+/drive/
+
+# =========================
+# LOG FILES
+# =========================
+*.log
+
+# =========================
+# TEMP FILES
+# =========================
+tmp/
+temp/
+*.tmp.venv39/
+venv/
+__pycache__/
+.venv39/
