@@ -1,7 +1,7 @@
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
-from backend.inference import predict_image, SELECTED_CLASSES
+from backend.inference import CLASS_THRESHOLDS, DISPLAY_CLASSES, predict_image, SELECTED_CLASSES
 import logging
 import time
 from datetime import datetime
@@ -51,10 +51,19 @@ async def api_info():
             {"name": "EfficientNet-B0", "input_channels": 7}
         ],
         "classes": SELECTED_CLASSES,
+        "display_classes": DISPLAY_CLASSES,
+        "preprocessing": {
+            "input_contract": ["blue", "green", "red", "nir", "ndvi", "ndwi", "fdi"],
+            "sentinel_scaling": "divide raw Sentinel-2 DN values by 10000 when needed",
+            "image_size": 256,
+            "probability_activation": "sigmoid",
+            "ensemble_method": "weighted average of per-model probabilities",
+            "thresholds": CLASS_THRESHOLDS
+        },
         "improvements": {
             "loss_functions": ["Binary Cross-Entropy", "Dice Loss", "Focal Loss"],
             "techniques": ["Class Weighting", "Data Augmentation", "Early Stopping", "Test-Time Augmentation"],
-            "ensemble_method": "Weighted averaging by per-class AUC"
+            "ensemble_method": "Weighted averaging of calibrated sigmoid probabilities"
         },
         "supported_formats": list(ALLOWED_EXTENSIONS),
         "max_file_size_mb": MAX_FILE_SIZE // (1024 * 1024)
@@ -71,7 +80,8 @@ async def predict(file: UploadFile = File(...)):
         logger.info(f"[{request_id}] Prediction request - File: {file.filename}")
 
         # Validate file extension
-        if not any(file.filename.lower().endswith(ext) for ext in ALLOWED_EXTENSIONS):
+        filename = file.filename or ""
+        if not any(filename.lower().endswith(ext) for ext in ALLOWED_EXTENSIONS):
             logger.warning(f"[{request_id}] Invalid file extension: {file.filename}")
             raise HTTPException(
                 status_code=400,
@@ -106,7 +116,16 @@ async def predict(file: UploadFile = File(...)):
         result["request_id"] = request_id
         result["total_time"] = round(elapsed, 3)
 
-        logger.info(f"[{request_id}] Prediction successful - Time: {elapsed:.2f}s")
+        logger.info(
+            "[%s] Prediction successful - class=%s confidence=%.4f margin=%.4f probs=%s models=%s time=%.2fs",
+            request_id,
+            result.get("prediction"),
+            float(result.get("confidence", 0.0)),
+            float(result.get("margin", 0.0)),
+            result.get("ensemble"),
+            result.get("loaded_models"),
+            elapsed,
+        )
         return result
 
     except HTTPException:

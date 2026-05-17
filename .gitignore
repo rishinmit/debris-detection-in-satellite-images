@@ -14,6 +14,40 @@ MARIDA/
 *.pth
 *.ckpt
 *.onnx
+.gitignore
+/tools
+
+
+# Ignore unnecessary docs / generated files
+ARCHITECTURE_GUIDE.md
+ARCHITECTURE.md
+CHANGES*
+COMPLETE_UPGRADE_*
+DASHBOARD_UPGRADE_*
+FILES_CREATED.txt
+GET_STARTED.txt
+INTEGRATION_EXAMPLES*
+NOTEBOOK_REFERENCE.txt
+output.txt
+QUICK_REFERENCE.md
+QUICK_START_IMPROVE*
+RETRAINING_GUIDE.md
+SETUP_GUIDE.md
+START_HERE.md
+structure.txt
+UPGRADE_SUMMARY.txt
+UPGRADES.md
+WORKFLOW_SUMMARY.md
+
+# Ignore notebook backups / duplicates
+Copy_of_Working_FYP_1.ipynb
+Model_Copy_of_Working_FYP_1*
+Retrain_Improved_Models copy*
+*.ipynb_checkpoints/
+
+# Optional: ignore CSS/JSX experimental files
+PipelineFlow.css
+PipelineFlow.jsx
 
 # =========================
 # TRAINING OUTPUTS
