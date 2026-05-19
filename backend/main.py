@@ -5,6 +5,7 @@ from backend.inference import CLASS_THRESHOLDS, DISPLAY_CLASSES, predict_image, 
 import logging
 import time
 from datetime import datetime
+from typing import Any
 
 logging.basicConfig(
     level=logging.INFO,
@@ -28,6 +29,35 @@ app.add_middleware(
 
 ALLOWED_EXTENSIONS = {'.tif', '.tiff', '.jpg', '.jpeg', '.png'}
 MAX_FILE_SIZE = 50 * 1024 * 1024  # 50 MB
+
+
+def _normalize_prediction_fields(result: dict[str, Any]) -> dict[str, Any]:
+    """Ensure API responses always expose a stable predicted class field."""
+    prediction = result.get("prediction")
+    predicted_class = result.get("predicted_class")
+
+    if isinstance(predicted_class, str) and predicted_class.strip():
+        if not (isinstance(prediction, str) and prediction.strip()):
+            result["prediction"] = predicted_class.strip()
+        return result
+
+    if isinstance(prediction, str) and prediction.strip():
+        result["predicted_class"] = prediction.strip()
+        return result
+
+    ensemble = result.get("ensemble")
+    if isinstance(ensemble, dict) and ensemble:
+        numeric_scores: dict[str, float] = {}
+        for key, value in ensemble.items():
+            if isinstance(value, (int, float)):
+                numeric_scores[str(key)] = float(value)
+
+        if numeric_scores:
+            top_class = max(numeric_scores, key=numeric_scores.get)
+            result["predicted_class"] = top_class
+            result["prediction"] = top_class
+
+    return result
 
 @app.get("/health")
 async def health_check():
@@ -107,6 +137,7 @@ async def predict(file: UploadFile = File(...)):
 
         # Get predictions
         result = predict_image(contents)
+        result = _normalize_prediction_fields(result)
 
         if "error" in result:
             logger.error(f"[{request_id}] Prediction error: {result['error']}")

@@ -38,7 +38,8 @@ structure.txt
 UPGRADE_SUMMARY.txt
 UPGRADES.md
 WORKFLOW_SUMMARY.md
-
+class.py
+transfer_files.py
 # Ignore notebook backups / duplicates
 Copy_of_Working_FYP_1.ipynb
 Model_Copy_of_Working_FYP_1*

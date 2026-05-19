@@ -96,7 +96,7 @@ function App() {
             <span className="logo-icon">🛰️</span>
             <div className="logo-text">
               <h1>Marine Debris Detection</h1>
-              <p>AI-Powered Satellite Image Analysis</p>
+              <p>For Satellite Image Analysis</p>
             </div>
           </div>
           <div className="header-controls">
@@ -227,6 +227,7 @@ function App() {
                     topPrediction={result.topPrediction}
                     riskLevel={result.riskLevel}
                     modelAgreement={result.modelAgreement}
+                    preview={result.raw.preview}
                   />
                 </div>
               </>
@@ -269,8 +270,8 @@ function App() {
 
       <footer className="app-footer">
         <div className="footer-content">
-          <p>🛰️ Marine Debris Detection System | DeepLabV3 + ResNet50 + EfficientNet-B0</p>
-          <p className="footer-info">Final Year Deep Learning Project | Status: {apiReady ? '✅ Online' : '⚠️ Offline'}</p>
+          <p>🛰️ DeepLabV3 + ResNet50 + EfficientNet-B0</p>
+          <p className="footer-info">Marine Debris Detection in Satellite Images | Status: {apiReady ? '✅ Online' : '⚠️ Offline'}</p>
         </div>
       </footer>
     </div>

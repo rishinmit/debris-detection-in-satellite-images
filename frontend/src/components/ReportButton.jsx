@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import './ReportButton.css';
 import { generateReport } from '../utils/reportGenerator';
 
-const ReportButton = ({ data, topPrediction, riskLevel, modelAgreement }) => {
+const ReportButton = ({ data, topPrediction, riskLevel, modelAgreement, preview }) => {
   const [isGenerating, setIsGenerating] = useState(false);
 
   const handleDownload = () => {
     setIsGenerating(true);
     try {
-      const filename = generateReport(data, topPrediction, riskLevel, modelAgreement);
+      const filename = generateReport(data, topPrediction, riskLevel, modelAgreement, preview);
       setTimeout(() => {
         setIsGenerating(false);
       }, 500);
